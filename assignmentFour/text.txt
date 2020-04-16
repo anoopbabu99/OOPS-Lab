@@ -1,0 +1,8 @@
+ok ok randomString ok randomString
+ok ok randomString
+the long string that has exactly 80 characters is the one below:
+longStringlongStringlongStringlongStringlongStringlongStringlongStringlongString
+longString is written 8 times and 10*8 = 80 characters.
+you can delete one character from the 80 character string and you will see that no exception occurs!
+ok randomString
+ok

@@ -1,0 +1,112 @@
+import java.util.*;
+
+public class q11{
+	
+	int status=0;
+	
+	class MyException extends Exception{
+		MyException(String s){
+			System.out.println(s);
+		}
+	}
+	
+	class Employee{
+		String name;
+		int age;
+		Employee(String n, int a){
+			this.name=n;
+			this.age=a;
+		}
+	}
+	
+	class N extends Thread{
+		
+		String name;
+		
+		N(String name){
+			this.name=name;
+		}
+	
+		public void run() {
+			if(name.matches(".*\\d.*")) {
+				try {
+					fnn();
+				} catch (MyException e) {
+				}
+			}
+			else {
+				status++;
+				System.out.println("Name does not contain numbers");
+			}
+	    }
+		void fnn() throws MyException{
+			throw new MyException("Name contains numbers");
+		}
+	}
+	
+	class A extends Thread{
+		int age;
+		A(int age){
+			this.age=age;
+		}
+		
+		public void run(){
+			if(age>50) {
+				try {
+					fna();
+				} catch (MyException e) {
+				}
+			}
+			else {
+				status++;
+				System.out.println("Age is less than 51");
+			}
+		}
+		
+		void fna() throws MyException{
+			throw new MyException("Age is greater than 50");
+		}
+		
+	}
+	
+	class O extends Thread{
+		String name;
+		int age;
+		O(String name, int age){
+			this.name=name;
+			this.age=age;
+		}
+		public void run() {
+			if(status==2) {
+				Employee e1=new Employee(name,age);
+				System.out.println("Object created");
+			}
+			else {
+				System.out.println("Object not created");
+			}
+		}
+	}
+	
+	public static void main(String[] args) throws Exception {
+		Scanner s=new Scanner(System.in);
+		System.out.println("Enter name: ");
+		String name=s.nextLine();
+		System.out.println("Enter age: ");
+		int age=s.nextInt();
+		
+		q11 obj1=new q11();
+		
+		N n1=obj1.new N(name);
+		n1.start();
+		n1.join();
+		
+		A a1=obj1.new A(age);
+		a1.start();
+		a1.join();
+		
+		O o1=obj1.new O(name,age);
+		o1.start();
+		
+	}
+	
+}

@@ -1,0 +1,126 @@
+import java.util.*;
+
+public class q13 {
+	
+	int number=0;
+    int status=1;
+    public static void main(String[] args) {
+
+        q13 obj1 = new q13();
+
+        A a=obj1.new A(obj1);
+        B b=obj1.new B(obj1);
+        C c=obj1.new C(obj1);
+
+        a.start();
+        b.start();
+        c.start();
+    }
+    
+    class A extends Thread{
+        q13 obj1;
+
+        A(q13 obj1){
+            this.obj1 = obj1;
+        }
+
+        @Override
+        public void run() {
+
+            try{
+                synchronized (obj1) {
+                	Random rand = new Random();
+                    for (int i = 0; i < 100; i++) {
+
+                        while(obj1.status!=1){
+                            obj1.wait();
+                        }
+                        number=rand.nextInt(10);
+                        System.out.print("\n"+number+" ");
+                        obj1.status = 2;
+                        obj1.notifyAll();
+                    }
+
+                }
+            }catch (Exception e) {
+                System.out.println("Exception 1 :"+e.getMessage());
+            }
+
+        }
+
+    }
+
+    class B extends Thread{
+
+        q13 obj1;
+
+        B(q13 obj1){
+            this.obj1 = obj1;
+        }
+
+        @Override
+        public void run() {
+
+            try{
+                synchronized (obj1) {
+
+                    for (int i = 0; i < 100; i++) {
+
+                    	while (obj1.status != 2){
+                    	    obj1.wait();
+                    	}
+                    	if(number%2==0) {
+                    		number=number*number;
+                    		System.out.print(number+" ");
+                    	}
+                        obj1.status = 3;
+                        obj1.notifyAll();
+                    }
+
+                }
+            }catch (Exception e) {
+                System.out.println("Exception 2 :"+e.getMessage());
+            }
+
+        }
+    }
+
+
+    class C extends Thread{
+
+        q13 obj1;
+
+        C(q13 obj1){
+            this.obj1 = obj1;
+        }
+
+        @Override
+        public void run() {
+
+            try{
+                synchronized (obj1) {
+
+                    for (int i = 0; i < 100; i++) {
+
+                        while(obj1.status!=3){
+                            obj1.wait();
+                        }
+
+                        if(number%2==1) {
+                    		number=number*number*number;
+                    		System.out.print(number+" ");
+                    	}
+                        obj1.status = 1;
+                        obj1.notifyAll();
+                    }
+
+                }
+            }catch (Exception e) {
+                System.out.println("Exception 3 :"+e.getMessage());
+            }
+
+        }
+    }
+    
+}
+

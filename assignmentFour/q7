@@ -1,0 +1,118 @@
+import java.io.IOException;
+
+public class q7 {
+
+    int status=1;
+    public static void main(String[] args) {
+
+        q7 obj1 = new q7();
+
+        A1 a=new A1(obj1);
+        B1 b=new B1(obj1);
+        C1 c=new C1(obj1);
+
+        a.start();
+        b.start();
+        c.start();
+    }
+}
+
+class A1 extends Thread{
+    q7 obj1;
+
+    A1(q7 obj1){
+        this.obj1 = obj1;
+    }
+
+    @Override
+    public void run() {
+
+        try{
+            synchronized (obj1) {
+
+                for (int i = 0; i < 100; i++) {
+
+                    while(obj1.status!=1){
+                        obj1.wait();
+                    }
+
+                    System.out.print("A ");
+                    obj1.status = 2;
+                    obj1.notifyAll();
+                }
+
+            }
+        }catch (Exception e) {
+            System.out.println("Exception 1 :"+e.getMessage());
+        }
+
+    }
+
+}
+
+class B1 extends Thread{
+
+    q7 obj1;
+
+    B1(q7 obj1){
+        this.obj1 = obj1;
+    }
+
+    @Override
+    public void run() {
+
+        try{
+            synchronized (obj1) {
+
+                for (int i = 0; i < 100; i++) {
+
+                	while (obj1.status != 2){
+                	    obj1.wait();
+                	}
+
+                    System.out.print("B ");
+                    obj1.status = 3;
+                    obj1.notifyAll();
+                }
+
+            }
+        }catch (Exception e) {
+            System.out.println("Exception 2 :"+e.getMessage());
+        }
+
+    }
+}
+
+
+class C1 extends Thread{
+
+    q7 obj1;
+
+    C1(q7 obj1){
+        this.obj1 = obj1;
+    }
+
+    @Override
+    public void run() {
+
+        try{
+            synchronized (obj1) {
+
+                for (int i = 0; i < 100; i++) {
+
+                    while(obj1.status!=3){
+                        obj1.wait();
+                    }
+
+                    System.out.print("C ");
+                    obj1.status = 1;
+                    obj1.notifyAll();
+                }
+
+            }
+        }catch (Exception e) {
+            System.out.println("Exception 3 :"+e.getMessage());
+        }
+
+    }
+}
